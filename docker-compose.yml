@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: calculadora-app
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: mongodb://mongo:27017/calculatorDB
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    networks:
+      - calculadora-network
+
+  mongo:
+    image: mongo:6.0
+    container_name: calculadora-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - calculadora-network
+
+volumes:
+  mongo-data:
+
+networks:
+  calculadora-network:
+    driver: bridge
